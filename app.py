@@ -367,7 +367,7 @@ review_text = st.text_area(
     label="review_text",
     label_visibility="collapsed",
     height=160,
-    placeholder="Paste a product review here — e.g. "This arrived two days early and works exactly as described..."",
+    placeholder="Paste a product review here — e.g. This arrived two days early and works exactly as described...",
 )
 
 st.markdown('<div class="section-label">Model</div>', unsafe_allow_html=True)
