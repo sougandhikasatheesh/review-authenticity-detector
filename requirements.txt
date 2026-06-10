@@ -1,11 +1,9 @@
 streamlit
-transformers==4.40.0
-torch==2.2.2
+transformers
+torch
 scikit-learn==1.6.1
 numpy
 pandas
-matplotlib
-seaborn
 nltk
 wordcloud
 openpyxl
