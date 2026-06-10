@@ -9,8 +9,6 @@ Run locally:
 import pickle
 import numpy as np
 import streamlit as st
-import torch
-from transformers import BertTokenizer, BertForSequenceClassification
 
 # ── Page config ────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -328,6 +326,8 @@ def load_lr():
 
 @st.cache_resource
 def load_bert():
+    import torch
+    from transformers import BertTokenizer, BertForSequenceClassification
     tokenizer  = BertTokenizer.from_pretrained("bert_finetuned/")
     bert_model = BertForSequenceClassification.from_pretrained("bert_finetuned/")
     bert_model.eval()
@@ -367,7 +367,7 @@ review_text = st.text_area(
     label="review_text",
     label_visibility="collapsed",
     height=160,
-    placeholder="Paste a product review here — e.g. This arrived two days early and works exactly as described...",
+    placeholder="Paste a product review here - e.g. This arrived two days early and works exactly as described...",
 )
 
 st.markdown('<div class="section-label">Model</div>', unsafe_allow_html=True)
@@ -401,6 +401,7 @@ if analyse_btn:
                     padding=True,
                     max_length=256,
                 ).to(device)
+                import torch
                 with torch.no_grad():
                     outputs = bert_model(**inputs)
                     prob    = torch.softmax(outputs.logits, dim=1).cpu().numpy()[0]
