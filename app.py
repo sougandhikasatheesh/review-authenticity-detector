@@ -24,15 +24,18 @@ st.set_page_config(
 )
 
 
+
 @st.cache_resource
 def load_models():
-    # Logistic Regression
-    with open("lr_model.pkl", "rb") as f:
+    # Logistic Regression - download from HuggingFace
+    from huggingface_hub import hf_hub_download
+    lr_path = hf_hub_download(repo_id="Sougandhika/review-authenticity-detector", filename="lr_model.pkl")
+    with open(lr_path, "rb") as f:
         lr_pipeline = pickle.load(f)
 
-    # BERT
-    tokenizer   = BertTokenizer.from_pretrained("bert_finetuned/")
-    bert_model  = BertForSequenceClassification.from_pretrained("bert_finetuned/")
+    # BERT - load directly from HuggingFace
+    tokenizer  = BertTokenizer.from_pretrained("Sougandhika/review-authenticity-detector")
+    bert_model = BertForSequenceClassification.from_pretrained("Sougandhika/review-authenticity-detector")
     bert_model.eval()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
