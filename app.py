@@ -463,12 +463,13 @@ if analyse_btn:
         icon         = "🤖" if label == 1 else "✅"
         result_label = "Bot-Generated" if label == 1 else "Genuine Review"
         result_sub   = "This review shows strong signals of bot authorship." if label == 1 else "This review reads as a genuine, human-written review."
+        result_color = "#cc4444" if label == 1 else "#2ea865"
         genuine_pct  = f"{prob[0]*100:.1f}%"
         bot_pct      = f"{prob[1]*100:.1f}%"
         genuine_w    = f"{prob[0]*100:.0f}%"
         bot_w        = f"{prob[1]*100:.0f}%"
-        genuine_color = "#69ffb0"
-        bot_color     = "#ff6b6b"
+        genuine_color = "#2ea865"
+        bot_color     = "#cc4444"
         model_name   = "BERT" if "BERT" in model_choice else "Logistic Regression"
 
         # Trust score
@@ -494,7 +495,7 @@ if analyse_btn:
         <div class="result-card-new">
             <div class="top-row">
                 <div class="top-left">
-                    <div class="res-label">{icon} {result_label}</div>
+                    <div class="res-label" style="color:{result_color};">{icon} {result_label}</div>
                     <div class="res-sub">{result_sub}</div>
                     <div class="bars">
                         <div class="bar-row">
@@ -512,10 +513,10 @@ if analyse_btn:
                 <div class="circle">
                     <svg viewBox="0 0 72 72" style="transform:rotate(-90deg);width:72px;height:72px;">
                         <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="5"/>
-                        <circle cx="36" cy="36" r="28" fill="none" stroke="#2ea865" stroke-width="5" stroke-dasharray="176" stroke-dashoffset="{stroke_offset}" stroke-linecap="round"/>
+                        <circle cx="36" cy="36" r="28" fill="none" stroke="{result_color}" stroke-width="5" stroke-dasharray="176" stroke-dashoffset="{stroke_offset}" stroke-linecap="round"/>
                     </svg>
                     <div class="circle-inner">
-                        <div class="circle-val">{trust_score}</div>
+                        <div class="circle-val" style="color:{result_color};">{trust_score}</div>
                         <div class="circle-lbl">Trust</div>
                     </div>
                 </div>
