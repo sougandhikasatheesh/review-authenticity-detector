@@ -30,30 +30,27 @@ html, body, [class*="css"] {
 .stApp {
     background-color: #080808;
     background-image:
-        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(180,180,180,0.18) 0%, rgba(100,100,100,0.06) 40%, transparent 70%),
-        radial-gradient(ellipse 30% 20% at 50% 60%, rgba(120,120,120,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(60,60,60,0.12) 0%, transparent 70%);
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px),
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(180,180,180,0.12) 0%, transparent 60%);
+    background-size: 20px 20px, 20px 20px, 100% 100%;
     color: #e8e8e8;
-    animation: spotlightPulse 6s ease-in-out infinite;
-}
-
-@keyframes spotlightPulse {
-    0%, 100% { 
-        background-image:
-            radial-gradient(ellipse 60% 40% at 50% 0%, rgba(180,180,180,0.18) 0%, rgba(100,100,100,0.06) 40%, transparent 70%),
-            radial-gradient(ellipse 30% 20% at 50% 60%, rgba(120,120,120,0.07) 0%, transparent 60%),
-            radial-gradient(ellipse 80% 60% at 50% 100%, rgba(60,60,60,0.12) 0%, transparent 70%);
-    }
-    50% { 
-        background-image:
-            radial-gradient(ellipse 65% 45% at 50% 0%, rgba(200,200,200,0.22) 0%, rgba(120,120,120,0.08) 40%, transparent 70%),
-            radial-gradient(ellipse 30% 20% at 50% 60%, rgba(120,120,120,0.07) 0%, transparent 60%),
-            radial-gradient(ellipse 80% 60% at 50% 100%, rgba(80,80,80,0.15) 0%, transparent 70%);
-    }
 }
 
 /* Hide default streamlit header */
 #MainMenu, footer, header { visibility: hidden; }
+
+/* Force all containers transparent so grid shows through */
+.stApp > div, .stApp > div > div, .stApp > div > div > div,
+[data-testid="stAppViewContainer"], [data-testid="stAppViewBlockContainer"],
+[data-testid="block-container"], [data-testid="stVerticalBlock"],
+[data-testid="stVerticalBlockBorderWrapper"],
+.main, .main > div, .block-container,
+section[tabindex="0"], section.main > div {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #e8e8e8 !important;
+}
 
 /* Hero section */
 .hero {
@@ -112,12 +109,13 @@ html, body, [class*="css"] {
 .stat-value {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
     letter-spacing: -0.02em;
 }
 .stat-label {
     font-size: 0.72rem;
-    color: #555;
+    color: #aaaaaa !important;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-top: 0.2rem;
@@ -140,22 +138,29 @@ html, body, [class*="css"] {
     margin-bottom: 0.75rem;
 }
 
-/* Override streamlit textarea */
-.stTextArea textarea {
-    background-color: rgba(255,255,255,0.08) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    border-radius: 10px !important;
+/* textarea — identical to stat cards */
+div[data-testid="stTextArea"] textarea,
+div[data-testid="stTextArea"] > div > div > textarea,
+.stTextArea textarea,
+textarea {
+    background: #1a1a1a !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 12px !important;
     color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 0.95rem !important;
     resize: none !important;
-}
-.stTextArea textarea:focus {
-    border-color: rgba(255,255,255,0.25) !important;
     box-shadow: none !important;
+    caret-color: #ffffff !important;
 }
-.stTextArea textarea::placeholder {
-    color: #888 !important;
+div[data-testid="stTextArea"] textarea::placeholder,
+div[data-testid="stTextArea"] > div > div > textarea::placeholder,
+.stTextArea textarea::placeholder,
+textarea::placeholder {
+    color: rgba(255,255,255,0.3) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.3) !important;
+    opacity: 1 !important;
 }
 
 /* Radio buttons */
@@ -164,17 +169,23 @@ html, body, [class*="css"] {
 }
 .stRadio label {
     background: rgba(255,255,255,0.04) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
     border-radius: 8px !important;
     padding: 0.5rem 1rem !important;
-    color: #888 !important;
+    color: #cccccc !important;
+    -webkit-text-fill-color: #cccccc !important;
     font-size: 0.85rem !important;
     cursor: pointer;
     transition: all 0.15s;
 }
 .stRadio label:hover {
     border-color: rgba(255,255,255,0.2) !important;
-    color: #ccc !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+.stRadio p, .stRadio span, .stRadio div {
+    color: #cccccc !important;
+    -webkit-text-fill-color: #cccccc !important;
 }
 
 /* Analyse button */
@@ -317,11 +328,11 @@ html, body, [class*="css"] {
     letter-spacing: 0.04em;
 }
 
-/* Section label */
+/* Section label — mid-gray so it reads in both light and dark */
 .section-label {
     font-size: 0.75rem;
     font-weight: 500;
-    color: #444;
+    color: #888;
     text-transform: uppercase;
     letter-spacing: 0.09em;
     margin-bottom: 0.6rem;
@@ -353,7 +364,7 @@ html, body, [class*="css"] {
 .steps-sep { border: none; border-top: 0.5px solid rgba(255,255,255,0.06); margin-bottom: 1.25rem; }
 .steps { display: flex; }
 .step { flex: 1; text-align: center; position: relative; }
-.step:not(:last-child)::after { content: ; position: absolute; top: 11px; left: 56%; width: 88%; height: 0.5px; background: rgba(255,255,255,0.07); }
+.step:not(:last-child)::after { content: ''; position: absolute; top: 11px; left: 56%; width: 88%; height: 0.5px; background: rgba(255,255,255,0.07); }
 .dot { width: 22px; height: 22px; border-radius: 50%; margin: 0 auto 0.4rem; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
 .dot.done { background: rgba(46,168,101,0.1); border: 0.5px solid rgba(46,168,101,0.2); color: #2ea865; }
 .dot.active { background: #2ea865; color: #000; font-size: 9px; }
