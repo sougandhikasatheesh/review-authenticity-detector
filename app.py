@@ -28,8 +28,28 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-    background-color: #0a0a0a;
+    background-color: #080808;
+    background-image:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(180,180,180,0.18) 0%, rgba(100,100,100,0.06) 40%, transparent 70%),
+        radial-gradient(ellipse 30% 20% at 50% 60%, rgba(120,120,120,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(60,60,60,0.12) 0%, transparent 70%);
     color: #e8e8e8;
+    animation: spotlightPulse 6s ease-in-out infinite;
+}
+
+@keyframes spotlightPulse {
+    0%, 100% { 
+        background-image:
+            radial-gradient(ellipse 60% 40% at 50% 0%, rgba(180,180,180,0.18) 0%, rgba(100,100,100,0.06) 40%, transparent 70%),
+            radial-gradient(ellipse 30% 20% at 50% 60%, rgba(120,120,120,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse 80% 60% at 50% 100%, rgba(60,60,60,0.12) 0%, transparent 70%);
+    }
+    50% { 
+        background-image:
+            radial-gradient(ellipse 65% 45% at 50% 0%, rgba(200,200,200,0.22) 0%, rgba(120,120,120,0.08) 40%, transparent 70%),
+            radial-gradient(ellipse 30% 20% at 50% 60%, rgba(120,120,120,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse 80% 60% at 50% 100%, rgba(80,80,80,0.15) 0%, transparent 70%);
+    }
 }
 
 /* Hide default streamlit header */
@@ -67,7 +87,7 @@ html, body, [class*="css"] {
 }
 .hero-sub {
     font-size: 1rem;
-    color: #666;
+    color: #aaa;
     font-weight: 400;
     max-width: 420px;
     margin: 0 auto 2.5rem auto;
@@ -122,10 +142,10 @@ html, body, [class*="css"] {
 
 /* Override streamlit textarea */
 .stTextArea textarea {
-    background-color: rgba(255,255,255,0.04) !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
+    background-color: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
     border-radius: 10px !important;
-    color: #e8e8e8 !important;
+    color: #ffffff !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 0.95rem !important;
     resize: none !important;
@@ -135,7 +155,7 @@ html, body, [class*="css"] {
     box-shadow: none !important;
 }
 .stTextArea textarea::placeholder {
-    color: #444 !important;
+    color: #888 !important;
 }
 
 /* Radio buttons */
@@ -308,6 +328,38 @@ html, body, [class*="css"] {
     margin-top: 1.25rem;
 }
 
+/* New result card */
+.result-card-new {
+    background: rgba(255,255,255,0.02);
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+.top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.top-left { flex: 1; }
+.res-label { font-size: 1.1rem; font-weight: 600; color: #2ea865; letter-spacing: -0.02em; }
+.res-sub { font-size: 0.72rem; color: #888; margin-top: 3px; }
+.bars { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.85rem; }
+.bar-row { display: flex; align-items: center; gap: 0.75rem; }
+.bar-label { font-size: 11px; color: #aaa; width: 52px; }
+.bar-bg { flex: 1; height: 2px; background: rgba(255,255,255,0.05); border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 2px; border-radius: 99px; }
+.bar-val { font-size: 11px; color: #ccc; width: 32px; text-align: right; }
+.circle { width: 72px; height: 72px; position: relative; flex-shrink: 0; }
+.circle-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+.circle-val { font-size: 1.25rem; font-weight: 700; color: #2ea865; line-height: 1; }
+.circle-lbl { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+.steps-sep { border: none; border-top: 0.5px solid rgba(255,255,255,0.06); margin-bottom: 1.25rem; }
+.steps { display: flex; }
+.step { flex: 1; text-align: center; position: relative; }
+.step:not(:last-child)::after { content: ; position: absolute; top: 11px; left: 56%; width: 88%; height: 0.5px; background: rgba(255,255,255,0.07); }
+.dot { width: 22px; height: 22px; border-radius: 50%; margin: 0 auto 0.4rem; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+.dot.done { background: rgba(46,168,101,0.1); border: 0.5px solid rgba(46,168,101,0.2); color: #2ea865; }
+.dot.active { background: #2ea865; color: #000; font-size: 9px; }
+.step-lbl { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+.step-val { font-size: 10px; color: #bbb; margin-top: 2px; }
+
 /* Divider */
 .custom-divider {
     border: none;
@@ -434,40 +486,62 @@ if analyse_btn:
             trust_color   = "#ff6b6b"
             trust_verdict = "Likely Bot-Generated"
 
+        word_count = len(review_text.split())
+        stroke_offset = int(176 - (trust_score / 100) * 176)
+
         st.markdown(f"""
         <hr class="custom-divider">
-        <div class="result-card {card_class}">
-            <div class="result-icon">{icon}</div>
-            <div class="result-label {card_class}">{result_label}</div>
-            <div class="result-sub">{result_sub}</div>
-        </div>
-
-        <div class="trust-card">
-            <div class="trust-title">Trust Score</div>
-            <div class="trust-score" style="color:{trust_color};">{trust_score}</div>
-            <div class="trust-gauge-bg">
-                <div class="trust-gauge-fill" style="width:{trust_score}%; background:{trust_color};"></div>
-            </div>
-            <div class="trust-verdict" style="color:{trust_color};">{trust_verdict}</div>
-        </div>
-
-        <div class="prob-row">
-            <div class="prob-card">
-                <div class="prob-title">Genuine probability</div>
-                <div class="prob-value">{genuine_pct}</div>
-                <div class="prob-bar-bg">
-                    <div class="prob-bar-fill" style="width:{genuine_w}; background:{genuine_color};"></div>
+        <div class="result-card-new">
+            <div class="top-row">
+                <div class="top-left">
+                    <div class="res-label">{icon} {result_label}</div>
+                    <div class="res-sub">{result_sub}</div>
+                    <div class="bars">
+                        <div class="bar-row">
+                            <span class="bar-label">Genuine</span>
+                            <div class="bar-bg"><div class="bar-fill" style="width:{genuine_w};background:#2ea865;"></div></div>
+                            <span class="bar-val">{genuine_pct}</span>
+                        </div>
+                        <div class="bar-row">
+                            <span class="bar-label">Bot</span>
+                            <div class="bar-bg"><div class="bar-fill" style="width:{bot_w};background:#aa3333;"></div></div>
+                            <span class="bar-val">{bot_pct}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="circle">
+                    <svg viewBox="0 0 72 72" style="transform:rotate(-90deg);width:72px;height:72px;">
+                        <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="5"/>
+                        <circle cx="36" cy="36" r="28" fill="none" stroke="#2ea865" stroke-width="5" stroke-dasharray="176" stroke-dashoffset="{stroke_offset}" stroke-linecap="round"/>
+                    </svg>
+                    <div class="circle-inner">
+                        <div class="circle-val">{trust_score}</div>
+                        <div class="circle-lbl">Trust</div>
+                    </div>
                 </div>
             </div>
-            <div class="prob-card">
-                <div class="prob-title">Bot probability</div>
-                <div class="prob-value">{bot_pct}</div>
-                <div class="prob-bar-bg">
-                    <div class="prob-bar-fill" style="width:{bot_w}; background:{bot_color};"></div>
+            <div class="steps-sep"></div>
+            <div class="steps">
+                <div class="step">
+                    <div class="dot done">✓</div>
+                    <div class="step-lbl">Analysed</div>
+                    <div class="step-val">{word_count} words</div>
+                </div>
+                <div class="step">
+                    <div class="dot done">✓</div>
+                    <div class="step-lbl">Model</div>
+                    <div class="step-val">{model_name}</div>
+                </div>
+                <div class="step">
+                    <div class="dot done">✓</div>
+                    <div class="step-lbl">Result</div>
+                    <div class="step-val">{genuine_pct}</div>
+                </div>
+                <div class="step">
+                    <div class="dot active">{trust_score}</div>
+                    <div class="step-lbl">Trust</div>
+                    <div class="step-val">{trust_verdict}</div>
                 </div>
             </div>
-        </div>
-        <div style="text-align:center">
-            <span class="model-tag">Model: {model_name}</span>
         </div>
         """, unsafe_allow_html=True)
